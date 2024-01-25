@@ -3,7 +3,7 @@ type Diary = {
     author: string;
     content: string;
     emotion: number;
-    create_date: number;
+    created_date: number;
 };
 
 export default Diary;

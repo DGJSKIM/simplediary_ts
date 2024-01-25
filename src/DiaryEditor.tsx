@@ -1,9 +1,13 @@
 import React, {useRef, useState} from "react";
+interface DiaryEditorProps {
+    onCreate: (author: string, content: string, emotion: number) => void;
+}
 
-const DiaryEditor = () => {
+const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
 
     const authorInput = useRef<HTMLInputElement>(null);
     const contentInput = useRef<HTMLTextAreaElement>(null);
+
 
     const [state,setState] = useState({
         author : "",
@@ -23,6 +27,13 @@ const DiaryEditor = () => {
             return;
         }
         console.log(state);
+        onCreate(state.author, state.content, state.emotion);
+        // 저장 후 초기화
+        setState({
+            author: "",
+            content: "",
+            emotion: 1
+        })
         alert('저장 성공');
     }
 
