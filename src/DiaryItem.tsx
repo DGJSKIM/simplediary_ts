@@ -1,7 +1,7 @@
 import React from 'react';
 import Diary from "./Diary";
 
-const DiaryItem:React.FC<Diary> = ({author,content,created_date,emotion,id}) => {
+const DiaryItem:React.FC<Diary> = ({author,content,created_date,emotion}) => {
     return (
         <div className='DiaryItem'>
             <div className='info'>
