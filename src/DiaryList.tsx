@@ -3,9 +3,11 @@ import Diary from "./Diary";
 import DiaryItem from "./DiaryItem";
 
 type DiaryListProps = {
-    diaryList: Diary[];
+    diaryList: Diary[],
+    onRemove(targetId: number) : void,
+    onEdit : (targetId:number, newContent:string) => void
 };
-const DiaryList:React.FC<DiaryListProps> = ({diaryList}) => {
+const DiaryList:React.FC<DiaryListProps> = ({onRemove, diaryList,onEdit}) => {
     console.log(diaryList);
     return (
         <div className='DiaryList'>
@@ -13,7 +15,7 @@ const DiaryList:React.FC<DiaryListProps> = ({diaryList}) => {
             <h4>{diaryList.length}개의 일기가 있습니다.</h4>
             <div>
                 {diaryList.map((it)=>(
-                    <DiaryItem key={it.id} {...it}/>
+                    <DiaryItem Diary={it} onRemove={onRemove} onEdit={onEdit}/>
                 ))}
             </div>
         </div>

@@ -28,7 +28,6 @@ import Diary from "./Diary";
 //         create_date : new Date().getTime()
 //     }
 // ]
-
 function App() {
     const [data ,setData] = useState<Diary[]>([]);
 
@@ -36,6 +35,7 @@ function App() {
     const onCreate = (author:string, content:string, emotion:number) =>{
         const created_date:number = new Date().getTime();
 
+        dataId.current += 1;
         const newItem : Diary = {
             author,
             content,
@@ -43,14 +43,26 @@ function App() {
             created_date,
             id : dataId.current
         }
-        dataId.current += 1;
+
         setData([newItem,...data])
     }
+    const onRemove = (targetId:number) =>{
+        const newDiaryList:Diary[] = data.filter((it:Diary) => it.id !== targetId);
+        setData(newDiaryList);
+    }
 
+    const onEdit =(targetId:number, newContent:string) =>{
+        setData(
+            data.map((it)=>
+                it.id === targetId ? {...it, content : newContent}:it
+            )
+        );
+
+    }
   return (
     <div className="App">
         <DiaryEditor onCreate = {onCreate}/>
-        <DiaryList diaryList={data}/>
+        <DiaryList onRemove={onRemove} onEdit={onEdit} diaryList={data}/>
     </div>
   );
 }

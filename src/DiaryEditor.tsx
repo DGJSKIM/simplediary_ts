@@ -1,6 +1,7 @@
 import React, {useRef, useState} from "react";
 interface DiaryEditorProps {
     onCreate: (author: string, content: string, emotion: number) => void;
+
 }
 
 const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
