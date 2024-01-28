@@ -8,7 +8,6 @@ type DiaryListProps = {
     onEdit : (targetId:number, newContent:string) => void
 };
 const DiaryList:React.FC<DiaryListProps> = ({onRemove, diaryList,onEdit}) => {
-    console.log(diaryList);
     return (
         <div className='DiaryList'>
             <h2>일기 리스트</h2>
