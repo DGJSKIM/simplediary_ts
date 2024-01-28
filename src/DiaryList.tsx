@@ -14,7 +14,7 @@ const DiaryList:React.FC<DiaryListProps> = ({onRemove, diaryList,onEdit}) => {
             <h4>{diaryList.length}개의 일기가 있습니다.</h4>
             <div>
                 {diaryList.map((it)=>(
-                    <DiaryItem Diary={it} onRemove={onRemove} onEdit={onEdit}/>
+                    <DiaryItem  key={it.id} Diary={it} onRemove={onRemove} onEdit={onEdit}/>
                 ))}
             </div>
         </div>
