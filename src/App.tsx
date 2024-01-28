@@ -3,6 +3,7 @@ import './App.css';
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
 import Diary from "./Diary";
+import Lifecycle from "./Lifecycle";
 
 // type dummyList = Diary[];
 // const dummyList = [
@@ -61,6 +62,7 @@ function App() {
     }
   return (
     <div className="App">
+        <Lifecycle/>
         <DiaryEditor onCreate = {onCreate}/>
         <DiaryList onRemove={onRemove} onEdit={onEdit} diaryList={data}/>
     </div>
