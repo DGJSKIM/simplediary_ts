@@ -3,7 +3,6 @@ import './App.css';
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
 import Diary from "./Diary";
-import OptimizeTest from "./OptimizeTest";
 
 type jsonData = {
     email : string,
@@ -77,7 +76,8 @@ function App() {
 
   return (
       <div className="App">
-          <OptimizeTest/>
+          {/*<OptimizeTest/>*/}
+          {/*<OptimizeTest2/>*/}
           <DiaryEditor onCreate={onCreate}/>
           <div>전체 일기 : {data.length}</div>
           <div>기분 좋은 일기 개수 : {goodCount}</div>
