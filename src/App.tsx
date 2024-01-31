@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useReducer, useRef} from 'react';
 import './App.css';
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -9,9 +9,33 @@ type jsonData = {
     body : string,
     emotion : number,
 }
+const reducer =(state : any , action:any)=> {
+    switch (action.type){
+        case 'INIT':{
+            return action.data;
+        }
+        case 'CREATE': {
+            const created_date:number = new Date().getTime();
+            const newItem = {
+                ...action.data,
+                created_date
+            }
+            return [newItem, ...state];
+        }
+        case 'REMOVE':{
+            return state.filter((it:Diary)=> it.id !== action.targetId);
+        }
+        case 'EDIT':{
+            return state.map((it:Diary)=> it.id === action.targetId?{...it,content:action.newContent}:it);
+        }
+        default :
+        return
+    }
+}
 function App() {
-    const [data ,setData] = useState<Diary[]>([]);
+    // const [data ,setData] = useState<Diary[]>([]);
 
+    const [data, dispatch] = useReducer(reducer, []);
     const dataId = useRef(0);
 
     const getData = async() => {
@@ -28,25 +52,24 @@ function App() {
                 id : dataId.current++
             }as Diary;
         });
-        setData(initData);
+        dispatch({type:"INIT", data:initData})
     };
 
     useEffect(() => {
         getData();
     }, []);
     const onCreate = useCallback((author:string, content:string, emotion:number) =>{
-        const created_date:number = new Date().getTime();
 
-
-        const newItem : Diary = {
-            author,
-            content,
-            emotion,
-            created_date,
-            id : dataId.current
-        }
+        dispatch({
+            type:"CREATE",
+            data:{author,
+                content,
+                emotion,
+                // created_date, 얘는 어차피 안받아와도 만들 수 있는 값이니 안넘김
+                id : dataId.current
+            }
+        });
         dataId.current += 1;
-        setData((data)=>[newItem,...data])
     },[]); // 마운트 되는 시점에 한번만 만들어지고 그다음부터는 생성했던 거 그대로씀
     // => onCreate 가 변하지 않으므로 삭제할때마다 editor 가 리렌더 되는 현상 사라짐
     // 맨처음 생성될 때는 data 가 빈배열이므로 항상 data 가 빈배열인 줄 안다
@@ -54,21 +77,17 @@ function App() {
     // 즉 추가할때의 data 를 참조하기 위해 함수형 업데이트를 사용하는것
 
     const onRemove = useCallback((targetId:number) =>{
-        setData((data) => data.filter((it:Diary) => it.id !== targetId));
+        dispatch({type:"REMOVE",targetId})
     },[]);
 
     const onEdit = useCallback((targetId:number, newContent:string) =>{
-        setData(
-            data.map((it)=>
-                it.id === targetId ? {...it, content : newContent}:it
-            )
-        );
+        dispatch({type:"EDIT",targetId, newContent})
     },[]);
 
 
     const getDiaryAnalysis = useMemo(
         () => {
-            const goodCount: number = data.filter((it) => it.emotion >= 3).length;
+            const goodCount: number = data.filter((it:Diary) => it.emotion >= 3).length;
             const badCount: number = data.length - goodCount;
             const goodRatio: number = (goodCount / data.length) * 100;
             return {goodCount, badCount, goodRatio};
