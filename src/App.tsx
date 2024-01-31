@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import './App.css';
 import DiaryEditor from "./DiaryEditor";
 import DiaryList from "./DiaryList";
@@ -34,10 +34,10 @@ function App() {
     useEffect(() => {
         getData();
     }, []);
-    const onCreate = (author:string, content:string, emotion:number) =>{
+    const onCreate = useCallback((author:string, content:string, emotion:number) =>{
         const created_date:number = new Date().getTime();
 
-        dataId.current += 1;
+
         const newItem : Diary = {
             author,
             content,
@@ -45,9 +45,14 @@ function App() {
             created_date,
             id : dataId.current
         }
+        dataId.current += 1;
+        setData((data)=>[newItem,...data])
+    },[]); // 마운트 되는 시점에 한번만 만들어지고 그다음부터는 생성했던 거 그대로씀
+    // => onCreate 가 변하지 않으므로 삭제할때마다 editor 가 리렌더 되는 현상 사라짐
+    // 맨처음 생성될 때는 data 가 빈배열이므로 항상 data 가 빈배열인 줄 안다
+    // 그래서 함수형 업데이트를 통해 현재값을 가져와서 newItem 을 추가하는 콜백함수를 setData 에 전달
+    // 즉 추가할때의 data 를 참조하기 위해 함수형 업데이트를 사용하는것
 
-        setData([newItem,...data])
-    }
     const onRemove = (targetId:number) =>{
         const newDiaryList:Diary[] = data.filter((it:Diary) => it.id !== targetId);
         setData(newDiaryList);

@@ -1,10 +1,14 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 interface DiaryEditorProps {
     onCreate: (author: string, content: string, emotion: number) => void;
 
 }
 
 const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
+
+    useEffect(()=>{
+        console.log("DiaryEditor 렌더");
+    });
 
     const authorInput = useRef<HTMLInputElement>(null);
     const contentInput = useRef<HTMLTextAreaElement>(null);
@@ -86,4 +90,4 @@ const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
     )
 }
 
-export default DiaryEditor;
+export default React.memo(DiaryEditor);
