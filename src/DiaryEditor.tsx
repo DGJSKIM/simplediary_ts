@@ -6,10 +6,6 @@ interface DiaryEditorProps {
 
 const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
 
-    useEffect(()=>{
-        console.log("DiaryEditor 렌더");
-    });
-
     const authorInput = useRef<HTMLInputElement>(null);
     const contentInput = useRef<HTMLTextAreaElement>(null);
 
@@ -31,7 +27,6 @@ const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
         if(!validateState()){
             return;
         }
-        console.log(state);
         onCreate(state.author, state.content, state.emotion);
         // 저장 후 초기화
         setState({

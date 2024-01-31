@@ -1,4 +1,4 @@
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Diary from "./Diary";
 
 type DiaryItemProps = {
@@ -8,8 +8,11 @@ type DiaryItemProps = {
 }
 
 const DiaryItem:React.FC<DiaryItemProps> = ({onRemove,Diary,onEdit}) => {
-    const { id,author, content, created_date, emotion } = Diary;
+    useEffect(() => {
+        console.log(`${id}번째 아이템 렌더!`);
+    }, []);
 
+    const { id,author, content, created_date, emotion } = Diary;
     const [isEdit, setIsEdit] = useState(false);
     const toggleIsEdit = () => setIsEdit(!isEdit);
 
@@ -80,4 +83,4 @@ const DiaryItem:React.FC<DiaryItemProps> = ({onRemove,Diary,onEdit}) => {
         ;
 };
 
-export default DiaryItem;
+export default React.memo(DiaryItem);

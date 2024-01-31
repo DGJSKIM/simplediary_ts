@@ -53,18 +53,17 @@ function App() {
     // 그래서 함수형 업데이트를 통해 현재값을 가져와서 newItem 을 추가하는 콜백함수를 setData 에 전달
     // 즉 추가할때의 data 를 참조하기 위해 함수형 업데이트를 사용하는것
 
-    const onRemove = (targetId:number) =>{
-        const newDiaryList:Diary[] = data.filter((it:Diary) => it.id !== targetId);
-        setData(newDiaryList);
-    };
+    const onRemove = useCallback((targetId:number) =>{
+        setData((data) => data.filter((it:Diary) => it.id !== targetId));
+    },[]);
 
-    const onEdit =(targetId:number, newContent:string) =>{
+    const onEdit = useCallback((targetId:number, newContent:string) =>{
         setData(
             data.map((it)=>
                 it.id === targetId ? {...it, content : newContent}:it
             )
         );
-    };
+    },[]);
 
 
     const getDiaryAnalysis = useMemo(
