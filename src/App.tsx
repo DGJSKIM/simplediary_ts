@@ -31,7 +31,14 @@ const reducer =(state : any , action:any)=> {
         default :
         return
     }
-}
+};
+
+export const DiaryStateContext = React.createContext<Diary[]>([]);
+export const DiaryDispatchContext = React.createContext({
+    onCreate: (author: string, content: string, emotion: number) => {},
+    onRemove: (targetId: number) => {},
+    onEdit: (targetId: number, newContent: string) => {},
+});
 function App() {
     // const [data ,setData] = useState<Diary[]>([]);
 
@@ -84,6 +91,10 @@ function App() {
         dispatch({type:"EDIT",targetId, newContent})
     },[]);
 
+    const memoizedDispatches = useMemo(()=>{
+        return {onCreate,onRemove,onEdit}
+    },[]);
+
 
     const getDiaryAnalysis = useMemo(
         () => {
@@ -98,16 +109,21 @@ function App() {
     // 함수를 리턴하는게 아니라 함수가 리턴하는 값을 리턴하므로 getDiaryAnalysis() 가 아닌 getDiaryAnalysis 가 된다
 
   return (
-      <div className="App">
-          {/*<OptimizeTest/>*/}
-          {/*<OptimizeTest2/>*/}
-          <DiaryEditor onCreate={onCreate}/>
-          <div>전체 일기 : {data.length}</div>
-          <div>기분 좋은 일기 개수 : {goodCount}</div>
-          <div>기분 나쁜 일기 개수 : {badCount}</div>
-          <div>기분 좋은 일기 비율 : {goodRatio}</div>
-          <DiaryList onRemove={onRemove} onEdit={onEdit} diaryList={data}/>
-      </div>
+      <DiaryStateContext.Provider value={data}>
+          <DiaryDispatchContext.Provider value={memoizedDispatches}>
+          <div className="App">
+              {/*<OptimizeTest/>*/}
+              {/*<OptimizeTest2/>*/}
+              <DiaryEditor />
+              <div>전체 일기 : {data.length}</div>
+              <div>기분 좋은 일기 개수 : {goodCount}</div>
+              <div>기분 나쁜 일기 개수 : {badCount}</div>
+              <div>기분 좋은 일기 비율 : {goodRatio}</div>
+              <DiaryList onRemove={onRemove} onEdit={onEdit} />
+          </div>
+          </DiaryDispatchContext.Provider>
+      </DiaryStateContext.Provider>
+
   );
 }
 

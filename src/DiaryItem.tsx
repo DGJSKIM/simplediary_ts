@@ -1,16 +1,14 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 import Diary from "./Diary";
+import {DiaryDispatchContext} from "./App";
 
 type DiaryItemProps = {
-    onRemove(targetId: number) : void,
     Diary: Diary,
-    onEdit : (targetId:number, newContent:string) => void
+
 }
 
-const DiaryItem:React.FC<DiaryItemProps> = ({onRemove,Diary,onEdit}) => {
-    useEffect(() => {
-        console.log(`${id}번째 아이템 렌더!`);
-    }, []);
+const DiaryItem:React.FC<DiaryItemProps> = ({Diary}) => {
+    const {onRemove, onEdit} = useContext(DiaryDispatchContext)
 
     const { id,author, content, created_date, emotion } = Diary;
     const [isEdit, setIsEdit] = useState(false);

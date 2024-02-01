@@ -1,10 +1,10 @@
-import React, {useEffect, useRef, useState} from "react";
-interface DiaryEditorProps {
-    onCreate: (author: string, content: string, emotion: number) => void;
+import React, {useContext, useEffect, useRef, useState} from "react";
+import {DiaryDispatchContext} from "./App";
 
-}
 
-const DiaryEditor: React.FC<DiaryEditorProps>  = ({onCreate}) => {
+const DiaryEditor = () => {
+
+    const {onCreate} = useContext(DiaryDispatchContext);
 
     const authorInput = useRef<HTMLInputElement>(null);
     const contentInput = useRef<HTMLTextAreaElement>(null);
